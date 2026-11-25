@@ -3,6 +3,6 @@ import { defineConfig } from 'vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/t3_act8_eq11/',
+  base: '/',
   plugins: [react()],
 })
