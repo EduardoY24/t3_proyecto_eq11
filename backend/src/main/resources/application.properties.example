@@ -17,6 +17,9 @@ jwt.expiration=3600000
 
 spring.mail.host=localhost
 spring.mail.port=25
+spring.mail.properties.mail.smtp.connectiontimeout=3000
+spring.mail.properties.mail.smtp.timeout=3000
+spring.mail.properties.mail.smtp.writetimeout=3000
 app.mail.from=no-reply@tudominio.com
 
 twilio.account-sid=TU_TWILIO_ACCOUNT_SID
