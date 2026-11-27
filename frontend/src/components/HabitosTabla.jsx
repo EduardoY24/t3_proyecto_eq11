@@ -24,6 +24,7 @@ function HabitosTabla({
   const [eliminando, setEliminando] = useState(false);
   const [errorEliminar, setErrorEliminar] = useState('');
   const [mensaje, setMensaje] = useState('');
+  const [enviandoId, setEnviandoId] = useState(null); // id del habito cuyo recordatorio se esta enviando
 
   useEffect(() => {
     api.get('/categorias').then(({ data }) => setCategorias(data)).catch(() => {});
@@ -41,6 +42,19 @@ function HabitosTabla({
       setErrorEliminar(leerError(err).general);
     } finally {
       setEliminando(false);
+    }
+  }
+
+  // Pide al backend que mande el recordatorio por WhatsApp (Twilio). Responde { enviado: true|false }.
+  async function enviarRecordatorio(habito) {
+    try {
+      setEnviandoId(habito.id);
+      const { data } = await api.post(`/habitos/${habito.id}/recordatorio`);
+      setMensaje(data.enviado ? 'Recordatorio enviado por WhatsApp' : 'No se pudo enviar (Twilio no configurado)');
+    } catch (err) {
+      setMensaje(leerError(err).general || 'No se pudo enviar el recordatorio');
+    } finally {
+      setEnviandoId(null);
     }
   }
 
@@ -65,6 +79,14 @@ function HabitosTabla({
       titulo: 'Acciones',
       render: (h) => (
         <div className="acciones">
+          <button
+            type="button"
+            className="boton boton-chico boton-whatsapp"
+            disabled={enviandoId === h.id}
+            onClick={() => enviarRecordatorio(h)}
+          >
+            {enviandoId === h.id ? 'Enviando...' : 'Recordatorio WhatsApp'}
+          </button>
           <button type="button" className="boton boton-chico boton-editar" onClick={() => setModal({ habito: h })}>Editar</button>
           <button type="button" className="boton boton-chico boton-peligro" onClick={() => { setErrorEliminar(''); setAEliminar(h); }}>Eliminar</button>
         </div>

@@ -16,6 +16,8 @@
 .boton-peligro:hover:not(:disabled) { background: #991B1B; }
 .boton-editar { background: var(--color-primario-claro); color: var(--color-primario-oscuro); }
 .boton-editar:hover:not(:disabled) { background: #E0E7FF; }
+.boton-whatsapp { background: var(--color-exito-claro); color: var(--color-exito); }
+.boton-whatsapp:hover:not(:disabled) { background: #BBF7D0; }
 .boton-chico { padding: 6px 12px; font-size: 13px; }
 .boton-grande { padding: 14px; width: 100%; }
 
