@@ -248,6 +248,14 @@ function manejar(config) {
     habitos.push(h);
     return ok(201, habitoAResp(h));
   }
+  // Recordatorio por WhatsApp: en modo demo Twilio no esta configurado, asi que responde enviado:false
+  m = /^\/habitos\/(\d+)\/recordatorio$/.exec(ruta);
+  if (m && metodo === 'post') {
+    const h = habitos.find((x) => x.id === Number(m[1]));
+    if (!h) error(404, { error: 'El hábito no existe' });
+    if (yo.rol !== 'ADMIN' && h.usuarioId !== yo.id) error(403, { error: 'Ese hábito no es tuyo' });
+    return ok(200, { enviado: false });
+  }
   m = /^\/habitos\/(\d+)$/.exec(ruta);
   if (m) {
     const h = habitos.find((x) => x.id === Number(m[1]));
