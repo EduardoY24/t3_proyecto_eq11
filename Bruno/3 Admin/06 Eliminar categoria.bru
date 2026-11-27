@@ -1,0 +1,21 @@
+meta {
+  name: 06 Eliminar categoria
+  type: http
+  seq: 6
+}
+
+delete {
+  url: {{baseUrl}}/admin/categorias/{{categoriaId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{tokenAdmin}}
+}
+
+tests {
+  test("Responde 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

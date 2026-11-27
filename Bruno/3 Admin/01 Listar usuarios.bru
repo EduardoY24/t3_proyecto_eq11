@@ -1,0 +1,21 @@
+meta {
+  name: 01 Listar usuarios (filtro por rol)
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/admin/usuarios?page=0&size=10&rol=USUARIO
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{tokenAdmin}}
+}
+
+tests {
+  test("Responde 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

@@ -1,0 +1,33 @@
+meta {
+  name: 03 Actualizar usuario
+  type: http
+  seq: 3
+}
+
+put {
+  url: {{baseUrl}}/admin/usuarios/{{usuarioId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{tokenAdmin}}
+}
+
+body:json {
+  {
+    "nombre": "Usuario Editado Por Admin",
+    "email": "editado.{{$timestamp}}@habitos.com",
+    "password": "",
+    "telefono": "+525511111111",
+    "rol": "USUARIO",
+    "activo": true,
+    "coachId": 3
+  }
+}
+
+tests {
+  test("Responde 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

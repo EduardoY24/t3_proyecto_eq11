@@ -1,0 +1,26 @@
+meta {
+  name: 05 Contrasena debil en registro (400)
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/auth/register
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombre": "Prueba",
+    "email": "correo-mal",
+    "password": "123",
+    "telefono": "abc"
+  }
+}
+
+tests {
+  test("Responde 400", function () {
+    expect(res.getStatus()).to.equal(400);
+  });
+}

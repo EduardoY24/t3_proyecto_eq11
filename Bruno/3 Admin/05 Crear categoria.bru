@@ -1,0 +1,32 @@
+meta {
+  name: 05 Crear categoria
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/admin/categorias
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{tokenAdmin}}
+}
+
+body:json {
+  {
+    "nombre": "Hidratacion {{$timestamp}}",
+    "color": "#00A8E8"
+  }
+}
+
+script:post-response {
+  bru.setEnvVar("categoriaId", res.body.id);
+}
+
+tests {
+  test("Responde 201", function () {
+    expect(res.getStatus()).to.equal(201);
+  });
+}

@@ -1,0 +1,21 @@
+meta {
+  name: 08 Token invalidado tras logout (401)
+  type: http
+  seq: 8
+}
+
+get {
+  url: {{baseUrl}}/habitos
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{tokenNuevo}}
+}
+
+tests {
+  test("Responde 401", function () {
+    expect(res.getStatus()).to.equal(401);
+  });
+}

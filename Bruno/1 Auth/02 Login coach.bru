@@ -1,0 +1,28 @@
+meta {
+  name: 02 Login coach
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/auth/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "coach1@habitos.com",
+    "password": "Coach123!"
+  }
+}
+
+script:post-response {
+  bru.setEnvVar("tokenCoach", res.body.token);
+}
+
+tests {
+  test("Responde 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

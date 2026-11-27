@@ -1,0 +1,21 @@
+meta {
+  name: 06 Habito no existe (404)
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/habitos/99999
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{tokenUsuario}}
+}
+
+tests {
+  test("Responde 404", function () {
+    expect(res.getStatus()).to.equal(404);
+  });
+}

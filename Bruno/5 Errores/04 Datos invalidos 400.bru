@@ -1,0 +1,31 @@
+meta {
+  name: 04 Datos invalidos (400)
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/habitos
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{tokenUsuario}}
+}
+
+body:json {
+  {
+    "nombre": "",
+    "descripcion": "",
+    "frecuencia": "CADA RATO",
+    "activo": null,
+    "categoriaIds": []
+  }
+}
+
+tests {
+  test("Responde 400", function () {
+    expect(res.getStatus()).to.equal(400);
+  });
+}

@@ -1,0 +1,35 @@
+meta {
+  name: 03 Crear habito
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/habitos
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{tokenUsuario}}
+}
+
+body:json {
+  {
+    "nombre": "Tomar vitaminas",
+    "descripcion": "Despues del desayuno",
+    "frecuencia": "DIARIO",
+    "activo": true,
+    "categoriaIds": [1, 4]
+  }
+}
+
+script:post-response {
+  bru.setEnvVar("habitoId", res.body.id);
+}
+
+tests {
+  test("Responde 201", function () {
+    expect(res.getStatus()).to.equal(201);
+  });
+}

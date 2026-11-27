@@ -1,0 +1,21 @@
+meta {
+  name: 06 Eliminar habito
+  type: http
+  seq: 6
+}
+
+delete {
+  url: {{baseUrl}}/habitos/{{habitoId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{tokenUsuario}}
+}
+
+tests {
+  test("Responde 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

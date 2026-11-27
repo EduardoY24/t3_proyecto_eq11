@@ -1,0 +1,21 @@
+meta {
+  name: 02 Habitos de un usuario
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/coach/usuarios/4/habitos?page=0&size=5
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{tokenCoach}}
+}
+
+tests {
+  test("Responde 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

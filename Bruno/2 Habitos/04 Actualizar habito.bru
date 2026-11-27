@@ -1,0 +1,31 @@
+meta {
+  name: 04 Actualizar habito
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/habitos/{{habitoId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{tokenUsuario}}
+}
+
+body:json {
+  {
+    "nombre": "Tomar vitaminas y omega 3",
+    "descripcion": "Despues del desayuno",
+    "frecuencia": "DIARIO",
+    "activo": true,
+    "categoriaIds": [1, 4, 8]
+  }
+}
+
+tests {
+  test("Responde 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

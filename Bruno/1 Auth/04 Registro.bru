@@ -1,0 +1,30 @@
+meta {
+  name: 04 Registro
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/auth/register
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombre": "Usuario Bruno",
+    "email": "bruno.{{$timestamp}}@habitos.com",
+    "password": "Bruno123!",
+    "telefono": "+525500000000"
+  }
+}
+
+script:post-response {
+  if (res.body.token) { bru.setEnvVar("tokenNuevo", res.body.token); }
+}
+
+tests {
+  test("Responde 201", function () {
+    expect(res.getStatus()).to.equal(201);
+  });
+}

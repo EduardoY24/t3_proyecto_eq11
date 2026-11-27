@@ -1,0 +1,21 @@
+meta {
+  name: 05 Recordatorio por WhatsApp
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/habitos/1/recordatorio
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{tokenUsuario}}
+}
+
+tests {
+  test("Responde 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

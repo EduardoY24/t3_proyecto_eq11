@@ -1,0 +1,31 @@
+meta {
+  name: 03 Asignar habito (manda SMS)
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/coach/usuarios/4/habitos
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{tokenCoach}}
+}
+
+body:json {
+  {
+    "nombre": "Caminar 20 minutos",
+    "descripcion": "Asignado por tu coach",
+    "frecuencia": "DIARIO",
+    "activo": true,
+    "categoriaIds": [2]
+  }
+}
+
+tests {
+  test("Responde 201", function () {
+    expect(res.getStatus()).to.equal(201);
+  });
+}

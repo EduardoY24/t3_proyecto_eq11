@@ -1,0 +1,37 @@
+meta {
+  name: 02 Crear usuario
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/admin/usuarios
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{tokenAdmin}}
+}
+
+body:json {
+  {
+    "nombre": "Usuario Creado Por Admin",
+    "email": "admin.crea.{{$timestamp}}@habitos.com",
+    "password": "Prueba123!",
+    "telefono": "+525511111111",
+    "rol": "USUARIO",
+    "activo": true,
+    "coachId": 2
+  }
+}
+
+script:post-response {
+  bru.setEnvVar("usuarioId", res.body.id);
+}
+
+tests {
+  test("Responde 201", function () {
+    expect(res.getStatus()).to.equal(201);
+  });
+}

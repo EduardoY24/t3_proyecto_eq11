@@ -1,0 +1,21 @@
+meta {
+  name: 03 Habito de otro usuario (403)
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/habitos/3
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{tokenUsuario}}
+}
+
+tests {
+  test("Responde 403", function () {
+    expect(res.getStatus()).to.equal(403);
+  });
+}

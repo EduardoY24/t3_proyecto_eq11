@@ -1,0 +1,23 @@
+meta {
+  name: 05 Recuperar contrasena
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/auth/recuperar
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "ana@habitos.com"
+  }
+}
+
+tests {
+  test("Responde 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

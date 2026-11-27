@@ -1,0 +1,21 @@
+meta {
+  name: 01 Mis usuarios
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/coach/usuarios
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{tokenCoach}}
+}
+
+tests {
+  test("Responde 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

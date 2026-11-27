@@ -1,0 +1,21 @@
+meta {
+  name: 07 Listar categorias
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{baseUrl}}/categorias
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{tokenUsuario}}
+}
+
+tests {
+  test("Responde 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+}
