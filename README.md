@@ -10,8 +10,8 @@ Aplicación web para crear, organizar y dar seguimiento a hábitos personales. L
 
 | | |
 |---|---|
-| Aplicación (HTTPS) | **PENDIENTE: https://TU-DOMINIO** |
-| URL base de la API | **PENDIENTE: https://TU-DOMINIO/api** |
+| Aplicación (HTTPS) | https://habitos.194-195-86-95.sslip.io |
+| URL base de la API | https://habitos.194-195-86-95.sslip.io/api |
 | Tablero de GitHub Projects | https://github.com/users/EduardoY24/projects/5 |
 | Prototipo en Figma | https://www.figma.com/proto/XKZc41AhWo12sTfNCqHdcr/Proyecto-Final---H%C3%A1bitos--eq11-?node-id=3-492&p=f&t=KzPVsRTUlyaKz16I-0&scaling=min-zoom&content-scaling=fixed&page-id=1%3A2&starting-point-node-id=3%3A6 |
 | Paleta, logo y tipografía (Figma) | https://www.figma.com/proto/XKZc41AhWo12sTfNCqHdcr/Proyecto-Final---H%C3%A1bitos--eq11-?node-id=1-3&p=f&t=H72EwgThdO8sRsLZ-0&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1 |
@@ -219,4 +219,45 @@ En `frontend/.env.development` debe estar `VITE_USE_MOCK=false` y `VITE_API_URL=
 
 ## Despliegue en el VPS
 
-**PENDIENTE**: backend como JAR con systemd, frontend como build estático con Nginx, MySQL en el mismo servidor y HTTPS con Let's Encrypt (Certbot).
+La aplicación corre en el VPS del curso (Ubuntu) con el dominio gratuito `habitos.194-195-86-95.sslip.io`, que apunta a la IP del servidor.
+
+| Parte | Cómo corre |
+|---|---|
+| Backend | JAR de Spring Boot en el puerto interno 8089, como servicio de systemd (`habitos.service`) que arranca solo y se reinicia si se cae |
+| Configuración | `application.properties` de producción junto al JAR (fuera del repositorio, permisos 600) |
+| Base de datos | MySQL en el mismo servidor, base `habitos_db` con un usuario propio solo para este proyecto; Flyway crea las tablas al arrancar |
+| Frontend | Build de React (`npm run build`) servido por Nginx desde `/var/www/habitos` |
+| Proxy | Nginx manda todo lo que empieza con `/api/` al backend en `127.0.0.1:8089` |
+| HTTPS | Certificado de Let's Encrypt con Certbot; `http` redirige a `https` |
+
+**Pasos para actualizar**
+```bash
+# En la laptop
+cd backend && ./mvnw clean package -DskipTests
+cd ../frontend && npm run build
+scp backend/target/habitos-0.0.1-SNAPSHOT.jar usuario@IP:~/habitos/habitos.jar
+scp -r frontend/dist usuario@IP:~/habitos/
+
+# En el VPS
+sudo systemctl restart habitos
+sudo cp -r ~/habitos/dist/* /var/www/habitos/
+```
+
+**Servicio de systemd** (`/etc/systemd/system/habitos.service`)
+```ini
+[Service]
+User=eduardo
+WorkingDirectory=/home/eduardo/habitos
+ExecStart=/usr/bin/java -Xmx256m -jar habitos.jar
+Restart=always
+```
+
+**Sitio de Nginx** (`/etc/nginx/sites-available/habitos`)
+```nginx
+server {
+    server_name habitos.194-195-86-95.sslip.io;
+    root /var/www/habitos;
+    location / { try_files $uri $uri/ /index.html; }
+    location /api/ { proxy_pass http://127.0.0.1:8089; }
+}
+```
