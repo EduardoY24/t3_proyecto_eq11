@@ -152,6 +152,11 @@ erDiagram
 - **SMS** (Twilio): cuando un coach le asigna un hábito nuevo a un usuario.
 - **WhatsApp** (Twilio): botón "Enviar recordatorio" en la tabla de hábitos.
 
+**Estado en la cuenta de prueba**
+- Twilio está en cuenta *trial*: solo envía a números verificados. Los SMS salen del backend y llegan a Twilio (se ven en el log de mensajes), pero la compañía telefónica en México los marca como *Undelivered* porque vienen de un número de prueba de EE. UU.
+- El remitente de WhatsApp de la cuenta de prueba no se pudo vincular a tiempo con el número de prueba; el código del envío es el mismo que el de SMS, cambiando el prefijo `whatsapp:`.
+- Para SPF y DKIM se necesita un dominio propio donde agregar registros TXT. El despliegue usa `sslip.io` (dominio gratuito sin DNS editable), así que el correo queda configurado en Spring (`spring.mail.*`) pero sin SPF/DKIM.
+
 ## Endpoints principales
 
 | Método | Ruta | Rol |
