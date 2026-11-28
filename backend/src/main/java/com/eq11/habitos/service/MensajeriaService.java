@@ -29,15 +29,21 @@ public class MensajeriaService {
     @Value("${twilio.whatsapp-from}")
     private String whatsappFrom;
 
+    @Value("${twilio.whatsapp-content-sid:}")
+    private String contentSid;
+
+    @Value("${twilio.whatsapp-content-variables:}")
+    private String contentVariables;
+
     public boolean enviarSms(String telefono, String texto) {
-        return enviar(smsFrom, telefono, texto);
+        return enviar(smsFrom, telefono, texto, false);
     }
 
     public boolean enviarWhatsapp(String telefono, String texto) {
-        return enviar(whatsappFrom, "whatsapp:" + telefono, texto);
+        return enviar(whatsappFrom, "whatsapp:" + telefono, texto, true);
     }
 
-    private boolean enviar(String de, String para, String texto) {
+    private boolean enviar(String de, String para, String texto, boolean esWhatsapp) {
         if (accountSid == null || accountSid.isBlank() || para == null || para.isBlank()) {
             log.warn("Twilio no está configurado o el destinatario no tiene teléfono");
             return false;
@@ -46,7 +52,14 @@ public class MensajeriaService {
             MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
             form.add("From", de);
             form.add("To", para);
-            form.add("Body", texto);
+            if (esWhatsapp && !contentSid.isBlank()) {
+                form.add("ContentSid", contentSid);
+                if (!contentVariables.isBlank()) {
+                    form.add("ContentVariables", contentVariables.replace("{texto}", texto.replace("\"", "'")));
+                }
+            } else {
+                form.add("Body", texto);
+            }
             restClient.post()
                     .uri(URL, accountSid)
                     .headers(h -> h.setBasicAuth(accountSid, authToken))
