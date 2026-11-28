@@ -36,7 +36,7 @@ Hay 9 usuarios con rol USUARIO (`ana`, `luis`, `maria`, `carlos`, `sofia`, `jorg
 | Backend | Java 21, Spring Boot 4.1, Spring Web, Spring Data JPA (Hibernate), Spring Security, JWT (jjwt), Bean Validation, Flyway, JavaMailSender, Lombok |
 | Base de datos | MySQL 8.4 |
 | Frontend | React + Vite, React Router, Axios |
-| Comunicación | Postfix (correo), Twilio (SMS y WhatsApp) |
+| Comunicación | JavaMailSender con SMTP de Gmail (correo), Twilio (SMS y WhatsApp) |
 | Servidor | VPS con Nginx, systemd y Let's Encrypt (Certbot) |
 | Herramientas | Git y GitHub Projects, Bruno, Figma |
 
@@ -148,7 +148,7 @@ erDiagram
 - Modales de confirmación (nunca `alert` ni `confirm`), indicadores de carga, manejo de errores de red y diseño responsivo.
 
 **Comunicación con el usuario**
-- **Correo** (JavaMailSender → Postfix del VPS): bienvenida al registrarse y enlace para recuperar la contraseña.
+- **Correo** (JavaMailSender → SMTP de Gmail con contraseña de aplicación): bienvenida al registrarse y enlace para recuperar la contraseña, que vence en 30 minutos y solo se puede usar una vez. Se usó el SMTP de Gmail porque el despliegue no tiene dominio propio (usa `sslip.io`) y sin dominio no se pueden publicar los registros SPF y DKIM que Postfix necesita para que los correos no sean rechazados.
 - **SMS** (Twilio): cuando un coach le asigna un hábito nuevo a un usuario.
 - **WhatsApp** (Twilio): botón "Enviar recordatorio" en la tabla de hábitos.
 
